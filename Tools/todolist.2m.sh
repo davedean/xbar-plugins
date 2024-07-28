@@ -14,23 +14,31 @@
 # - Check icon made by Smashicons <https://smashicons.com>
 
 if [ "$1" = "done" ]; then
-	osascript -e 	'tell application "Reminders"
-				set activeReminders to (reminders of list "Today" whose completed is false)
-				set todo to first item of activeReminders
-				tell todo
-					set completed to true
-				end tell
-			end tell'
+	osascript -e 	'set target to (current date) + 1 * days
+			 set time of target to 0
+
+			 	tell application "Reminders"
+			 		set activeReminders to every reminder whose due date < target and completed is false
+      
+					set todo to first item of activeReminders
+					tell todo
+						set completed to true
+					end tell
+				end tell'
 fi
 
-reminder=$(osascript -e 'tell application "Reminders"
-				set activeReminders to (reminders of list "Today" whose completed is false)
-				if activeReminders is not {} then
-					return name of first item of activeReminders
-				else
-					return "No Todos!"
-				end if
-			end tell')
+reminder=$(osascript -e 'set target to (current date) + 1 * days
+			 set time of target to 0
+
+			 	tell application "Reminders"
+			 		set activeReminders to every reminder whose due date < target and completed is false
+			
+					if activeReminders is not {} then
+						return name of first item of activeReminders
+					else
+						return "No Todos!"
+					end if
+				end tell')
 
 # Choose a different icon by uncommenting the appropriate line and commenting out all others:
 # todo list
